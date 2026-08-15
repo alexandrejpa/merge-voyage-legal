@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voyage Messenger</title>
+<meta name="description" content="Mensageiro seguro do Merge Voyage — criptografia de ponta a ponta, sem número de telefone.">
+<meta name="theme-color" content="#2080c0">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- Tela de login/registro -->
+<div id="auth-screen" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="/icon.svg" alt="" width="64" height="64">
+      <h1>Voyage Messenger</h1>
+      <p class="auth-tagline">Criptografia de ponta a ponta. Sem número de telefone. Suas mensagens são só suas.</p>
+    </div>
+    <div class="auth-tabs">
+      <button id="tab-login" class="auth-tab active" type="button">Entrar</button>
+      <button id="tab-register" class="auth-tab" type="button">Criar conta</button>
+    </div>
+    <form id="auth-form">
+      <label>Nome de usuário
+        <input id="auth-username" type="text" autocomplete="username" required
+               minlength="3" maxlength="24" pattern="[A-Za-z0-9_.]+" spellcheck="false">
+      </label>
+      <label>Senha
+        <input id="auth-password" type="password" autocomplete="current-password" required minlength="8">
+      </label>
+      <p id="auth-error" class="auth-error" hidden></p>
+      <button id="auth-submit" class="btn-primary" type="submit">Entrar</button>
+      <p class="auth-note" id="auth-note-register" hidden>
+        Sua senha protege sua chave privada de criptografia e nunca é enviada ao servidor.
+        <strong>Não há recuperação de senha</strong> — guarde-a bem.
+      </p>
+    </form>
+  </div>
+</div>
+
+<!-- App principal -->
+<div id="app" class="app" hidden>
+  <aside id="sidebar" class="sidebar">
+    <header class="sidebar-header">
+      <div class="me">
+        <span class="avatar" id="me-avatar"></span>
+        <span id="me-name" class="me-name"></span>
+      </div>
+      <div class="sidebar-actions">
+        <button id="btn-new-group" class="icon-btn" title="Novo grupo" aria-label="Novo grupo">👥</button>
+        <button id="btn-theme" class="icon-btn" title="Alternar tema" aria-label="Alternar tema">◐</button>
+        <button id="btn-logout" class="icon-btn" title="Sair" aria-label="Sair">⏻</button>
+      </div>
+    </header>
+    <div class="search-box">
+      <input id="search-input" type="search" placeholder="Buscar pessoas ou conversas…" autocomplete="off">
+    </div>
+    <div id="search-results" class="search-results" hidden></div>
+    <nav id="convo-list" class="convo-list" aria-label="Conversas"></nav>
+    <footer class="sidebar-footer">
+      <span id="conn-status" class="conn-status">conectando…</span>
+    </footer>
+  </aside>
+
+  <main id="chat" class="chat">
+    <div id="chat-empty" class="chat-empty">
+      <img src="/icon.svg" alt="" width="80" height="80">
+      <h2>Voyage Messenger</h2>
+      <p>Escolha uma conversa ou busque alguém para começar.<br>
+      🔒 Todas as mensagens têm criptografia de ponta a ponta.</p>
+    </div>
+    <div id="chat-view" class="chat-view" hidden>
+      <header class="chat-header">
+        <button id="btn-back" class="icon-btn btn-back" aria-label="Voltar">‹</button>
+        <span class="avatar" id="chat-avatar"></span>
+        <div class="chat-title-box">
+          <div id="chat-title" class="chat-title"></div>
+          <div id="chat-subtitle" class="chat-subtitle"></div>
+        </div>
+        <button id="btn-add-member" class="icon-btn" title="Adicionar membro" aria-label="Adicionar membro" hidden>➕</button>
+        <button id="btn-leave" class="icon-btn" title="Sair do grupo" aria-label="Sair do grupo" hidden>🚪</button>
+      </header>
+      <div id="messages" class="messages" tabindex="0"></div>
+      <div id="typing" class="typing" hidden></div>
+      <div id="reply-bar" class="reply-bar" hidden>
+        <div class="reply-bar-text">
+          <span class="reply-bar-label">Respondendo a <b id="reply-author"></b></span>
+          <span id="reply-preview" class="reply-bar-preview"></span>
+        </div>
+        <button id="reply-cancel" class="icon-btn" aria-label="Cancelar resposta">✕</button>
+      </div>
+      <div id="edit-bar" class="reply-bar" hidden>
+        <div class="reply-bar-text"><span class="reply-bar-label">✏️ Editando mensagem</span></div>
+        <button id="edit-cancel" class="icon-btn" aria-label="Cancelar edição">✕</button>
+      </div>
+      <footer class="composer">
+        <textarea id="input" rows="1" placeholder="Mensagem…" maxlength="8000"></textarea>
+        <button id="btn-send" class="send-btn" aria-label="Enviar">➤</button>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<!-- Modal de novo grupo -->
+<dialog id="group-modal" class="modal">
+  <form method="dialog" id="group-form">
+    <h3 id="group-modal-title">Novo grupo</h3>
+    <label id="group-name-label">Nome do grupo
+      <input id="group-name" type="text" maxlength="64">
+    </label>
+    <label>Adicionar pessoas
+      <input id="group-search" type="search" placeholder="Buscar por nome de usuário…" autocomplete="off">
+    </label>
+    <div id="group-search-results" class="member-results"></div>
+    <div id="group-selected" class="member-chips"></div>
+    <div class="modal-actions">
+      <button type="button" id="group-cancel" class="btn-ghost">Cancelar</button>
+      <button type="submit" id="group-create" class="btn-primary">Criar</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" hidden></div>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>

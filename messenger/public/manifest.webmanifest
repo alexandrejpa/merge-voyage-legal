@@ -1,0 +1,13 @@
+{
+  "name": "Voyage Messenger",
+  "short_name": "Voyage",
+  "description": "Mensageiro seguro do Merge Voyage — criptografia de ponta a ponta, sem número de telefone.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1424",
+  "theme_color": "#2080c0",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
